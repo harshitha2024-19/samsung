@@ -1,0 +1,849 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/harshitha2024-19/samsung/blob/main/tensorflow\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "4tuFh3Cdf8LG"
+      },
+      "source": [
+        "## Coding Exercise #0701"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "pmxJHupcf8LL"
+      },
+      "source": [
+        "### 1. TensorFlow basics:"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 1,
+      "metadata": {
+        "id": "QkaK6_jSf8LM"
+      },
+      "outputs": [],
+      "source": [
+        "# Install once.\n",
+        "# !pip install tensorflow\n",
+        "# OR\n",
+        "# !pip install --user tensorflow-gpu"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 2,
+      "metadata": {
+        "id": "p09Jt7Wqf8LO",
+        "outputId": "085613fe-e331-4aad-f1f3-905639aeb986",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stderr",
+          "text": [
+            "WARNING:tensorflow:From /usr/local/lib/python3.12/dist-packages/tensorflow/python/compat/v2_compat.py:98: disable_resource_variables (from tensorflow.python.ops.resource_variables_toggle) is deprecated and will be removed in a future version.\n",
+            "Instructions for updating:\n",
+            "non-resource variables are not supported in the long term\n"
+          ]
+        }
+      ],
+      "source": [
+        "# import tensorflow as tf\n",
+        "import tensorflow.compat.v1 as tf\n",
+        "import numpy as np\n",
+        "\n",
+        "tf.disable_v2_behavior()"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "EsdmRRJXf8LO"
+      },
+      "source": [
+        "#### 1.1. Hello World!"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 3,
+      "metadata": {
+        "id": "wBksVBd5f8LP",
+        "outputId": "2d1a0735-92a2-42a4-b17d-1ef1dcbc0793",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "b'Hello World!'\n"
+          ]
+        }
+      ],
+      "source": [
+        "hello = tf.constant(\"Hello World!\")\n",
+        "with tf.Session() as sess:\n",
+        "    print(sess.run(hello))"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "m75e7TWff8LQ"
+      },
+      "source": [
+        "#### 1.2. Creating tensors:"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 4,
+      "metadata": {
+        "id": "uk0WqAXhf8LQ"
+      },
+      "outputs": [],
+      "source": [
+        "hello = tf.constant(\"Hello World!\")                         # String.\n",
+        "const_scalar = tf.constant(7)                               # A scalar tensor.\n",
+        "const_matrix = tf.constant([[1,2], [3,4]])                  # A matrix tensor.\n",
+        "mat_fill = tf.fill((4,4),9)                                 # A 4x4 tensor filled with 9s.\n",
+        "mat_zeros = tf.zeros((3,3))                                 # A 3x3 tensor filled with 0s.\n",
+        "mat_ones = tf.ones((5,5))                                   # A 5x5 tensor filled with 1s.\n",
+        "mat_randn = tf.random_normal((3,3), mean=0, stddev=1.0)     # 3x3 random normal tensor.\n",
+        "mat_randu = tf.random_uniform((4,4), minval=0, maxval=1.0)  # 4x4 random uniform tensor."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 5,
+      "metadata": {
+        "id": "FO7HJbT3f8LR",
+        "outputId": "cf31964a-ed06-4c65-ea89-a17027dd6320",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "<class 'bytes'>\n",
+            "\n",
+            "\n",
+            "b'Hello World!'\n",
+            "\n",
+            "\n",
+            "<class 'numpy.int32'>\n",
+            "\n",
+            "\n",
+            "7\n",
+            "\n",
+            "\n",
+            "<class 'numpy.ndarray'>\n",
+            "\n",
+            "\n",
+            "[[1 2]\n",
+            " [3 4]]\n",
+            "\n",
+            "\n",
+            "<class 'numpy.ndarray'>\n",
+            "\n",
+            "\n",
+            "[[9 9 9 9]\n",
+            " [9 9 9 9]\n",
+            " [9 9 9 9]\n",
+            " [9 9 9 9]]\n",
+            "\n",
+            "\n",
+            "<class 'numpy.ndarray'>\n",
+            "\n",
+            "\n",
+            "[[0. 0. 0.]\n",
+            " [0. 0. 0.]\n",
+            " [0. 0. 0.]]\n",
+            "\n",
+            "\n",
+            "<class 'numpy.ndarray'>\n",
+            "\n",
+            "\n",
+            "[[1. 1. 1. 1. 1.]\n",
+            " [1. 1. 1. 1. 1.]\n",
+            " [1. 1. 1. 1. 1.]\n",
+            " [1. 1. 1. 1. 1.]\n",
+            " [1. 1. 1. 1. 1.]]\n",
+            "\n",
+            "\n",
+            "<class 'numpy.ndarray'>\n",
+            "\n",
+            "\n",
+            "[[-1.1949035  -2.5796318  -0.18138629]\n",
+            " [ 0.43818715 -0.1742844   1.1822016 ]\n",
+            " [ 0.16356976  0.60943043 -1.2937908 ]]\n",
+            "\n",
+            "\n",
+            "<class 'numpy.ndarray'>\n",
+            "\n",
+            "\n",
+            "[[0.09093702 0.11851048 0.98682415 0.37316024]\n",
+            " [0.00741518 0.5226476  0.50988925 0.15998483]\n",
+            " [0.5583019  0.57227945 0.70012033 0.8849076 ]\n",
+            " [0.87043405 0.48104286 0.73513305 0.24483502]]\n",
+            "\n",
+            "\n"
+          ]
+        }
+      ],
+      "source": [
+        "my_ops=[hello, const_scalar, const_matrix, mat_fill, mat_zeros, mat_ones, mat_randn, mat_randu]\n",
+        "with tf.Session() as sess:\n",
+        "    for op in my_ops:\n",
+        "        res = sess.run(op)\n",
+        "        print(type(res))\n",
+        "        print('\\n')\n",
+        "        print(res)\n",
+        "        print('\\n')"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "oigmPuB2f8LR"
+      },
+      "source": [
+        "#### 1.3. Math operations:"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 6,
+      "metadata": {
+        "id": "Y-n3yC1zf8LS",
+        "outputId": "64528ad6-30ce-4c65-8b26-2ab90c167d5a",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "2\n"
+          ]
+        }
+      ],
+      "source": [
+        "n1 = tf.constant(1)\n",
+        "n2 = tf.constant(2)\n",
+        "n3 = n1* n2\n",
+        "with tf.Session() as sess:\n",
+        "    print(sess.run(n3))"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 7,
+      "metadata": {
+        "id": "Bs8YZZWcf8LS",
+        "outputId": "1e52d7a4-33bb-4a38-fe20-bc14a931afb9",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "9\n"
+          ]
+        }
+      ],
+      "source": [
+        "n1 = tf.constant(4)\n",
+        "n2 = tf.constant(5)\n",
+        "n3 = tf.add(n1,n2)\n",
+        "with tf.Session() as sess:\n",
+        "    print(sess.run(n3))"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 8,
+      "metadata": {
+        "id": "XxGJnlkof8LS",
+        "outputId": "977867d7-e3a2-4643-855e-5f7b8ab2ccda",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "6\n"
+          ]
+        }
+      ],
+      "source": [
+        "n1 = tf.constant(2)\n",
+        "n2 = tf.constant(3)\n",
+        "n3 = tf.multiply(n1,n2)\n",
+        "with tf.Session() as sess:\n",
+        "    print(sess.run(n3))"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 9,
+      "metadata": {
+        "id": "MOuE4p3Cf8LT",
+        "outputId": "f5b7b8bd-f18c-4b6c-9c91-f7bdfb865792",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "8\n"
+          ]
+        }
+      ],
+      "source": [
+        "n1 = tf.constant(2)\n",
+        "n2 = tf.constant(3)\n",
+        "n3 = tf.pow(n1,n2)\n",
+        "with tf.Session() as sess:\n",
+        "    print(sess.run(n3))"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "8CuavniBf8LT"
+      },
+      "source": [
+        "#### 1.4. Matrix functions and operations:"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 10,
+      "metadata": {
+        "id": "x0pHYgayf8LT",
+        "outputId": "c8db35c8-f511-4f9b-d873-8036d8074f5b",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "[[ 5]\n",
+            " [11]]\n"
+          ]
+        }
+      ],
+      "source": [
+        "m1 = tf.constant([[1,2], [3,4]])\n",
+        "m2 = tf.constant([[1], [2]])\n",
+        "m3 = tf.matmul(m1, m2)                            # Matrix multiplication. Different from the element-wise multiplication with multiply().\n",
+        "with tf.Session() as sess:\n",
+        "    print(sess.run(m3))"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 11,
+      "metadata": {
+        "id": "x8_xZ-_9f8LT",
+        "outputId": "2c4ef14b-f9cb-4dff-ba6a-cf14320e148b",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "[[19 22]\n",
+            " [43 50]]\n"
+          ]
+        }
+      ],
+      "source": [
+        "m1 = tf.constant([[1,2], [3,4]])\n",
+        "m2 = tf.constant([[5, 6], [7, 8]])\n",
+        "m3 = tf.matmul(m1, m2)\n",
+        "with tf.Session() as sess:\n",
+        "    print(sess.run(m3))"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 12,
+      "metadata": {
+        "id": "c1eck6WLf8LU",
+        "outputId": "dbd772ca-39b3-4580-a7e3-8cea82fce753",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "[[ 5 12]\n",
+            " [21 32]]\n"
+          ]
+        }
+      ],
+      "source": [
+        "m3 = tf.multiply(m1, m2)\n",
+        "with tf.Session() as sess:\n",
+        "    print(sess.run(m3))"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 13,
+      "metadata": {
+        "id": "X-oYkkvJf8LU",
+        "outputId": "c0f0721b-ce55-4eaf-a63d-7c755da4f7f3",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "[[ 5 12]\n",
+            " [21 32]]\n"
+          ]
+        }
+      ],
+      "source": [
+        "m3 = m1*m2\n",
+        "with tf.Session() as sess:\n",
+        "    print(sess.run(m3))"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 14,
+      "metadata": {
+        "id": "tjhT2kohf8LU",
+        "outputId": "9f1767a8-b05e-4ba3-d00f-7e659d564359",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "[[ 6  8]\n",
+            " [10 12]]\n"
+          ]
+        }
+      ],
+      "source": [
+        "m3 = m1 + m2\n",
+        "with tf.Session() as sess:\n",
+        "    print(sess.run(m3))"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 15,
+      "metadata": {
+        "id": "TTniLAJtf8LV",
+        "outputId": "2fa748c5-f0d8-48c8-ca0a-6439633f9e24",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "[[-4 -4]\n",
+            " [-4 -4]]\n"
+          ]
+        }
+      ],
+      "source": [
+        "m3 = m1-m2\n",
+        "with tf.Session() as sess:\n",
+        "    print(sess.run(m3))"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 16,
+      "metadata": {
+        "id": "p2Ds9Agef8LV",
+        "outputId": "81f9241d-c0fe-48c5-8e77-01b5f2a08c36",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "[[0.2   0.333]\n",
+            " [0.429 0.5  ]]\n"
+          ]
+        }
+      ],
+      "source": [
+        "m3 = m1 / m2\n",
+        "with tf.Session() as sess:\n",
+        "    print(np.round(sess.run(m3),3))"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 17,
+      "metadata": {
+        "id": "QCOOWn6rf8LV",
+        "outputId": "20eee11c-0cad-4e57-db6a-d3574ed7454b",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "[[1. 2.]\n",
+            " [3. 4.]]\n",
+            "\n",
+            "\n",
+            "[[1 0 0]\n",
+            " [0 2 0]\n",
+            " [0 0 3]]\n",
+            "\n",
+            "\n",
+            "[[1. 3.]\n",
+            " [2. 4.]]\n",
+            "\n",
+            "\n",
+            "[[-2.   1. ]\n",
+            " [ 1.5 -0.5]]\n",
+            "\n",
+            "\n",
+            "[[ 1.  0.]\n",
+            " [-0.  1.]]\n",
+            "\n",
+            "\n",
+            "-2.0\n",
+            "\n",
+            "\n"
+          ]
+        }
+      ],
+      "source": [
+        "# Matrix functions.\n",
+        "m = tf.constant([[1.0,2.0],[3.0,4.0]])\n",
+        "m_diagonal = tf.matrix_diag([1,2,3])\n",
+        "m_transpose = tf.matrix_transpose(m)\n",
+        "m_inverse = tf.matrix_inverse(m)\n",
+        "m_multiplied = tf.matmul(m, m_inverse)\n",
+        "m_determinant = tf.matrix_determinant(m)\n",
+        "my_matrices = [m, m_diagonal, m_transpose, m_inverse, m_multiplied, m_determinant]\n",
+        "with tf.Session() as sess:\n",
+        "    for mat in my_matrices:\n",
+        "        res = sess.run(mat)\n",
+        "        print(np.round(res,3))\n",
+        "        print('\\n')"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "TREU23SGf8LV"
+      },
+      "source": [
+        "#### 1.5. TensorFlow Variable:"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 18,
+      "metadata": {
+        "id": "cUqZZXbdf8LV",
+        "outputId": "85ea5678-0395-4b01-be24-911b457e591e",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "-3\n"
+          ]
+        }
+      ],
+      "source": [
+        "# Initializing Variables #1\n",
+        "x = tf.Variable(initial_value=5, name='x')       # Define.\n",
+        "y = tf.Variable(initial_value=6, name='y')       # Define.\n",
+        "f = (x - y)*y + 3                                # Define.\n",
+        "sess = tf.Session()\n",
+        "sess.run(x.initializer)                          # Initialize.\n",
+        "sess.run(y.initializer)                          # Initialize.\n",
+        "res = sess.run(f)\n",
+        "print(res)\n",
+        "sess.close()"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 19,
+      "metadata": {
+        "id": "YAzGHTvwf8LV",
+        "outputId": "1e780d23-d9d2-454a-eaac-97da2d9ae094",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "11\n"
+          ]
+        }
+      ],
+      "source": [
+        "# Initializing Variables #2\n",
+        "x = tf.Variable(initial_value=3, name='x')       # Define.\n",
+        "y = tf.Variable(initial_value=2, name='y')       # Define.\n",
+        "f = x*y + y + 3                                  # Define.\n",
+        "with tf.Session() as sess:\n",
+        "    x.initializer.run()                          # Initialize. The same as \"sess.run(x.initializer)\".\n",
+        "    y.initializer.run()                          # Initialize. The same as \"sess.run(y.initializer)\".\n",
+        "    res = f.eval()                               # The same as \"res = sess.run(f)\".\n",
+        "print(res)"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 20,
+      "metadata": {
+        "id": "SIWUQS-Rf8LV",
+        "outputId": "039d3ca1-177a-4010-cd64-238f7c32193b",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "59\n"
+          ]
+        }
+      ],
+      "source": [
+        "# Initializing Variables #3\n",
+        "x = tf.Variable(initial_value=7, name='x')       # Define.\n",
+        "y = tf.Variable(initial_value=3, name='y')       # Define.\n",
+        "f = x*y*y - y - 1                                # Define.\n",
+        "init = tf.global_variables_initializer()         # Prepare.\n",
+        "with tf.Session() as sess:\n",
+        "    sess.run(init)                               # Initialize.\n",
+        "    res = f.eval()                               # The same as \"res = sess.run(f)\".\n",
+        "print(res)"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 21,
+      "metadata": {
+        "id": "COrfNIXNf8LV",
+        "outputId": "a2b0ef9b-b135-4f46-bf24-17f183b94751",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "[[0.69456565 0.9485259  0.8559489  0.6307918 ]\n",
+            " [0.52644885 0.26095712 0.29935944 0.26039243]\n",
+            " [0.7993964  0.6262727  0.182899   0.3637339 ]\n",
+            " [0.2638744  0.32434392 0.31850684 0.26228547]]\n"
+          ]
+        }
+      ],
+      "source": [
+        "my_tensor = tf.random_uniform((4,4),0,1)\n",
+        "my_var = tf.Variable(initial_value = my_tensor)                  # Initial value from a tensor.\n",
+        "#my_matrix = np.random.uniform(0,1,(4,4))\n",
+        "#my_var = tf.Variable(initial_value = my_matrix)                  # Initial value from a Numpy array.\n",
+        "init = tf.global_variables_initializer()\n",
+        "with tf.Session() as sess:\n",
+        "    sess.run(init)\n",
+        "    print(sess.run(my_var))"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "Gw-e0nOBf8LW"
+      },
+      "source": [
+        "#### 1.6. TensorFlow Placeholder"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 22,
+      "metadata": {
+        "id": "K5jSRzHrf8LW",
+        "outputId": "23527a11-317b-49db-8d33-9e4e1a0d7d28",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "6.0\n"
+          ]
+        }
+      ],
+      "source": [
+        "a = tf.placeholder(tf.float32)\n",
+        "b = tf.placeholder(tf.float32)\n",
+        "y = tf.multiply(a, b)\n",
+        "with tf.Session() as sess:\n",
+        "    res = sess.run(y, feed_dict={a:2, b:3})           # Feed the actual valules.\n",
+        "    print(res)"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 23,
+      "metadata": {
+        "id": "G4a0OkEOf8LW",
+        "outputId": "2bbe51d1-dc16-483f-b9e4-ee82bc093320",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "[[1.9493022]\n",
+            " [3.259572 ]\n",
+            " [3.7932193]]\n",
+            "\n",
+            "\n",
+            "[[-5.1895514 ]\n",
+            " [-0.4759159 ]\n",
+            " [ 0.76363635]\n",
+            " [ 4.6815934 ]\n",
+            " [ 6.402954  ]\n",
+            " [-5.6862936 ]\n",
+            " [-4.963093  ]\n",
+            " [-8.809273  ]\n",
+            " [-5.3064833 ]\n",
+            " [ 3.0540478 ]]\n"
+          ]
+        }
+      ],
+      "source": [
+        "# Simulated data as NumPy array.\n",
+        "np.random.seed(123)\n",
+        "X1 = np.random.uniform(0.0, 1.0, (3,3))\n",
+        "X2 = np.random.normal(0.0, 1.0, (10,3))\n",
+        "b0 = np.array([1,2,3]).reshape((-1,1))\n",
+        "#\n",
+        "# The data may be a DataFrame.\n",
+        "# X1 = pd.DataFrame(X1)\n",
+        "# X2 = pd.DataFrame(X2)\n",
+        "#\n",
+        "X = tf.placeholder(tf.float32, shape=(None,3))       # \"None\" means that the number of rows is still undefined.\n",
+        "b = tf.placeholder(tf.float32, shape=(3,1))\n",
+        "y = tf.matmul(X, b)\n",
+        "with tf.Session() as sess:\n",
+        "    print(sess.run(y, feed_dict={X:X1, b:b0}))       # Feed in the data.\n",
+        "    print(\"\\n\")\n",
+        "    print(sess.run(y, feed_dict={X:X2, b:b0}))       # Feed in the data."
+      ]
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "display_name": "Python 3 (ipykernel)",
+      "language": "python",
+      "name": "python3"
+    },
+    "language_info": {
+      "codemirror_mode": {
+        "name": "ipython",
+        "version": 3
+      },
+      "file_extension": ".py",
+      "mimetype": "text/x-python",
+      "name": "python",
+      "nbconvert_exporter": "python",
+      "pygments_lexer": "ipython3",
+      "version": "3.11.4"
+    },
+    "colab": {
+      "provenance": [],
+      "include_colab_link": true
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 0
+}
